@@ -2,15 +2,22 @@
 
 Things tend to get messy... MeineEigenenSozialenSchulden :c
 
-## Getting Started
+# Features
+- Kein Account requirement für Mitesser
+- Gruppen haben Mitessera
+- Gruppen haben einen join code
+- für joinen in Gruppe QR Code
+- Write-only logs für Änderungen
+- Mitesser können extra Personen haben
+- Freitext für Essen (Titel+Beschreibung)
+- Gesamtpreis
+- maimais
 
-This project is a starting point for a Flutter application.
+# Fokus auf Android
+Und wenn web funktioniert ist das super
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# MESS ER
+*(Sprich Messer)*
+**MESS Emergency Room**
+- Notfallplanung falls es keine Essensideen gibt. Schlägt random alte Essen vor die schonmal gekocht wurden
+- Essen werden basiert auf Titel gruppiert
