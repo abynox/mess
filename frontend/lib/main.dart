@@ -1,36 +1,37 @@
+import 'dart:ui';
+
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:mess/provider/theme_provider.dart';
+import 'package:mess/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    final themeState = context.watch<ThemeProvider>();
+
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp(
+          title: "MESS",
+          theme: lightDynamic != null ? ThemeData(colorScheme: lightDynamic) : ThemeData.light(),
+          darkTheme: darkDynamic != null ? ThemeData(colorScheme: darkDynamic) : ThemeData.dark(),
+          themeMode: themeState.getThemeMode(),
+          home: HomeScreen(),
+        );
+      },
     );
   }
 }
@@ -105,9 +106,39 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
+            SegmentedButton<int>(
+              showSelectedIcon: false,
+              segments: [
+                ButtonSegment(value: 0, label: Icon(Icons.devices)),
+                ButtonSegment(value: 1, label: Icon(Icons.sunny)),
+                ButtonSegment(value: 2, label: Icon(Icons.nightlight)),
+              ],
+              selected: {
+                switch (context.read<ThemeProvider>().getThemeMode()) {
+                  ThemeMode.system => 0,
+                  ThemeMode.light => 1,
+                  ThemeMode.dark => 2,
+                },
+              },
+              onSelectionChanged: (Set<int> newSelection) {
+                if (newSelection.isNotEmpty) {
+                  switch (newSelection.first) {
+                    case 0:
+                      context.read<ThemeProvider>().setThemeMode(ThemeMode.system);
+                      break;
+                    case 1:
+                      context.read<ThemeProvider>().setThemeMode(ThemeMode.light);
+                      break;
+                    case 2:
+                      context.read<ThemeProvider>().setThemeMode(ThemeMode.dark);
+                      break;
+                  }
+                  // this setState is necessary since setThemeMode will not cause the ui to rebuild if for example
+                  // the new ThemeMode is set from light to system while the systems theme is already light
+                  setState(() {});
+                }
+              },
             ),
           ],
         ),
