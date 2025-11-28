@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:mess/provider/group_provider.dart';
 import 'package:mess/provider/theme_provider.dart';
 import 'package:mess/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => GroupProvider())
+      ],
       child: const MyApp(),
     ),
   );

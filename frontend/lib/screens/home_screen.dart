@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mess/views/food_view.dart';
+import 'package:mess/views/group_view.dart';
+import 'package:mess/views/settle_up_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,9 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: [Text("GroupName"), Icon(Icons.arrow_drop_down_outlined)],
+                children: [Text("GroupName"), const Icon(Icons.arrow_drop_down_outlined)],
               ),
               onTap: () {
+                // todo: change group popup
                 print("Group clicked");
               },
             ),
@@ -33,25 +37,24 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             tooltip: "More...",
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onPressed: () {
+              // todo: show overflow menu
               print("Iconbutton");
-              print("df");
             },
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (newIndex) {
-          setState(() {
-            _selectedIndex = newIndex;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(label: "Food", icon: Icon(Icons.fastfood)),
-          BottomNavigationBarItem(label: "Settle Up", icon: Icon(Icons.compare_arrows)),
-          BottomNavigationBarItem(label: "Group", icon: Icon(Icons.group)),
+      body: [FoodView(), SettleUpView(), GroupView()][_selectedIndex],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (newIndex) => setState(() {
+          _selectedIndex = newIndex;
+        }),
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.fastfood), label: "Food"),
+          NavigationDestination(icon: Icon(Icons.compare_arrows), label: "Settle Up"),
+          NavigationDestination(icon: Icon(Icons.group), label: "Group"),
         ],
       ),
     );
