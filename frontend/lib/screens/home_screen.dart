@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mess/provider/group_provider.dart';
 import 'package:mess/views/food_view.dart';
 import 'package:mess/views/group_view.dart';
 import 'package:mess/views/settle_up_view.dart';
+import 'package:mess/widgets/group_modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,22 +17,39 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => context.read<GroupProvider>().loadGroups());
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final groupProvider = context.watch<GroupProvider>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Row(
           children: [
-            Text("Group: "),
+            Text("Active group: "),
             InkWell(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: [Text("GroupName"), const Icon(Icons.arrow_drop_down_outlined)],
+                children: [
+                  Text(groupProvider.activeGroup != null ? groupProvider.activeGroup!.name : "No Group"),
+                  const Icon(Icons.arrow_drop_down_outlined),
+                ],
               ),
               onTap: () {
                 // todo: change group popup
                 print("Group clicked");
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  builder: (context) => GroupModalBottomSheet(),
+                );
               },
             ),
           ],
