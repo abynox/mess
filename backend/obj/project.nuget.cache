@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "MKpX3t/72tc=",
+  "success": true,
+  "projectFilePath": "/home/computerelite/rider/mess/backend/Mess.csproj",
+  "expectedPackageFiles": [
+    "/home/computerelite/.nuget/packages/microsoft.aspnetcore.openapi/9.0.9/microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512",
+    "/home/computerelite/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/home/computerelite/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.9/microsoft.aspnetcore.app.ref.9.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
