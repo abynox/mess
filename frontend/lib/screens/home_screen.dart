@@ -22,37 +22,39 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => context.read<GroupProvider>().loadGroups());
   }
 
+  void rebuildHomeScreen() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Rebuild home screen");
     final groupProvider = context.watch<GroupProvider>();
+    final selectedView = [FoodView(), SettleUpView(), GroupView()][_selectedIndex];
+    final floatingActionButton = selectedView.buildFloatingActionButton(context, rebuildHomeScreen);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Row(
-          children: [
-            Text("Active group: "),
-            InkWell(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(groupProvider.activeGroup != null ? groupProvider.activeGroup!.name : "No Group"),
-                  const Icon(Icons.arrow_drop_down_outlined),
-                ],
-              ),
-              onTap: () {
-                // todo: change group popup
-                print("Group clicked");
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  builder: (context) => GroupModalBottomSheet(),
-                );
-              },
-            ),
-          ],
+        title: InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Active group: ${groupProvider.activeGroup != null ? groupProvider.activeGroup!.name : "No Group"}"),
+              const Icon(Icons.arrow_drop_down_outlined),
+            ],
+          ),
+          onTap: () {
+            // todo: change group popup
+            print("Group clicked");
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              builder: (context) => GroupModalBottomSheet(),
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -65,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: [FoodView(), SettleUpView(), GroupView()][_selectedIndex],
+      body: selectedView,
+      floatingActionButton: floatingActionButton,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (newIndex) => setState(() {
