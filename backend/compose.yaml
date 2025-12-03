@@ -1,0 +1,7 @@
+﻿services:
+  mess:
+    image: mess
+    build:
+      context: .
+      dockerfile: Dockerfile
+
