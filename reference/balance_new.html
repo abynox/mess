@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance calculator</title>
+</head>
+<body>
+    <html>
+        <div id="balances">
+        </div>
+    </html>
+    <script>
+        let members = JSON.parse(localStorage.getItem("members") || `["a", "b", "c", "d"]`)
+        let balances = JSON.parse(localStorage.getItem("balances") || "{}")
+        let transactions = JSON.parse(localStorage.getItem("transactions") || "{}")
+
+        let exampleEntry = {
+            "name": "Pizza",
+            "date": "2025-12-23T21:23:21Z",
+            "participants": ["a", "b", "c"],
+            "payees": {
+                "a": 50,
+                "b": 2
+            }
+        }
+
+        function processTransaction(t) {
+            let nParticipants = t["participants"].length
+            for(const payee in t["payees"]) {
+                let payed = t["payees"][payee]
+                let costPerPerson = Math.floor(payed/nParticipants)
+                let diff = payed-costPerPerson*nParticipants
+
+                // difficulty here, how does one fairly distribute the difference
+            }
+        }
+
+        // account balances follow the scheme:
+        // {"person": {"owes": [balance, ledger]}}
+        function updateBalance(m, o, p) {
+            if(!balances[m]) balances[m] = {}
+            if(!balances[m][o]) balances[m][o] = [0,0]
+
+            if(!balances[o]) balances[o] = {}
+            if(!balances[o][m]) balances[o][m] = [0,0]
+            balances[m][o][0] += p
+            balances[o][m][0] -= p
+
+            localStorage.setItem("balances", JSON.stringify(balances))
+
+            showBalances()
+        }
+
+        
+
+        showBalances()
+
+        function showBalances() {
+            let header = `<tr><th>Member</th>`
+            let bal = ``
+            for(const m of members) {
+                header += `<th>${m}</th>`
+                bal += `<tr><td>${m}</td>`
+                for(const o of members) {
+                    bal += `<td>${o == m ? "-" : ((balances[m] ?? {})[o] ?? "?")}</td>`
+                }
+                bal += `</tr>`
+            }
+            header += `</tr>`
+            document.getElementById("balances").innerHTML = `<table>${header}${bal}</table>`
+        }
+    </script>
+</body>
+</html>

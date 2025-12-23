@@ -5,7 +5,8 @@ namespace Mess.Data;
 public class Group
 {    
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Uuid { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = "Unknown";
-    public List<Member> Membery { get; set; } = new();
+    public string CurrencyPostfix { get; set; } = "€";
+    public List<Member> Members { get; set; } = new();
 }
