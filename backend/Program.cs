@@ -6,6 +6,7 @@ using Mess.Data;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Scalar.AspNetCore;
 using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +22,9 @@ Console.WriteLine("Migrated Database");
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddDbContext<AppDatabaseContext>();
@@ -144,19 +145,22 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedProtoHeaderName = "X-Forwarded-Proto",
 });
 
+
+app.UseRouting();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.MapScalarApiReference();
 }
-
-
 app.UseFileServer();
 app.UseWebSockets();
 app.UseAuthentication();
-app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
-;
+
+
+
 app.Run();
 

@@ -1,3 +1,6 @@
 .idea
 bin
 obj
+Database.db
+Database.db-shm
+Database.db-wal

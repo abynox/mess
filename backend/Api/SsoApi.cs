@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mess.Api;
+[Authorize]
+
+[ApiController]
 [Route("/api/v1/sso")]
 public class SsoApi : Controller
 {

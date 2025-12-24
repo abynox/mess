@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mess.Api;
 
+[ApiController]
 [Route("api/v1/groups/{groupId:guid}/members")]
 public class MemberApi : Controller
 {
