@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Mess.Controllers;
+namespace Mess.Api;
 [Route("/api/v1/sso")]
 public class SsoApi : Controller
 {

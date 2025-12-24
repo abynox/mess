@@ -8,7 +8,17 @@ public class Entry
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public Group Group { get; set; }
-    public List<Member> Participants { get; set; } = new ();
-    public Dictionary<string, decimal> Payees { get; set; } = new();
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public required Group Group { get; set; }
+    public List<Participant> Participants { get; set; } = new ();
+
+    public int GetTotalPersonCount()
+    {
+        return Participants.Sum(x => x.ExtraParticipants + 1);
+    }
+
+    public int GetTotalPrice()
+    {
+        return (int)Participants.Sum(x => x.PaidAmount);
+    }
 }

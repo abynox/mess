@@ -5,7 +5,16 @@ namespace Mess.Data;
 public class Member
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public string Name { get; set; } = "Unknown";
-    public User? AssociatedUser { get; set; }
+    public Guid? UserId { get; set; }
+    public User? User { get; set; }
+    
+    public Member() { }
+
+    public Member(User user)
+    {
+        Name = user.Name;
+        UserId = user.Id;
+    }
 }

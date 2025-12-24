@@ -1,0 +1,21 @@
+{
+  "name": "Pizza",
+  "total": 243, // Berechnet von server
+  "myTotal": 81, // Berechnet von server
+  "myPersonCount": 1, // Berechnet von server
+  "pricePerPerson": 81, // Berechnet von server
+  "participants": [
+    {
+      "id": "asb",
+      "name": "Sebastian",
+      "extraPersons": 0,
+      "paid": 0
+    },
+    {
+      "id": "asa",
+      "name": "Philipp",
+      "extraPersons": 1,
+      "paid": 243
+    }
+  ]
+}

@@ -9,4 +9,14 @@ public class Group
     public string Name { get; set; } = "Unknown";
     public string CurrencyPostfix { get; set; } = "€";
     public List<Member> Members { get; set; } = new();
+
+    public bool CanBeAccessedBy(User loggedInUser)
+    {
+        return Members.Any(x => x.User?.Id == loggedInUser.Id);
+    }
+
+    public bool CanBeEditedBy(User loggedInUser)
+    {
+        return CanBeAccessedBy(loggedInUser);
+    }
 }
