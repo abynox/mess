@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Mess.Api.Data;
 using Mess.Auth;
 using Mess.Data;
@@ -28,7 +29,7 @@ public class MemberApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<List<Member>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<List<Member>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     [HttpGet]
     public IActionResult Get([FromRoute] Guid groupId)
     {
@@ -49,7 +50,7 @@ public class MemberApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Member>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Member>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     [HttpGet("{memberId:guid}")]
     public IActionResult Get([FromRoute] Guid groupId, [FromRoute] Guid memberId)
     {
@@ -72,7 +73,7 @@ public class MemberApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Member>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Member>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     [HttpPost]
     public IActionResult CreateMember([FromRoute] Guid groupId, [FromBody]  ApiMemberRequest member)
     {
@@ -102,7 +103,7 @@ public class MemberApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Member>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Member>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult UpdateMember([FromRoute] Guid groupId, [FromRoute] Guid memberId, [FromBody] ApiMemberRequest member)
     {
         User? loggedInUser = _currentUser.GetCurrentUser();
@@ -133,7 +134,7 @@ public class MemberApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Member>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Member>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult DeleteMember([FromRoute] Guid groupId, [FromRoute] Guid memberId)
     {
         User? loggedInUser = _currentUser.GetCurrentUser();

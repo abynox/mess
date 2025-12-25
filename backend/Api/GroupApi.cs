@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Threading.Tasks.Dataflow;
 using Mess.Api.Data;
 using Mess.Auth;
@@ -25,7 +26,7 @@ public class GroupApi : Controller
     /// <returns>Groups of the logged in user</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType<Group>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Group>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult GetGroups()
     {
         User? loggedInUser = _currentUser.GetCurrentUser();
@@ -39,7 +40,7 @@ public class GroupApi : Controller
     /// <returns>The created group</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType<Group>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Group>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult CreateGroup([FromBody] ApiGroupRequest group)
     {
         User? loggedInUser = _currentUser.GetCurrentUser();
@@ -65,7 +66,7 @@ public class GroupApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Group>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Group>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult UpdateGroup([FromRoute] Guid groupId, [FromBody] ApiGroupRequest group)
     {
         
@@ -90,7 +91,7 @@ public class GroupApi : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Group>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Group>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult GetGroup([FromRoute] Guid groupId)
     {
         
