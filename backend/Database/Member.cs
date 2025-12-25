@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Mess.Api.Data;
 
 namespace Mess.Data;
 
@@ -16,5 +17,10 @@ public class Member
     {
         Name = user.Name;
         UserId = user.Id;
+    }
+    
+    public Member(ApiMemberRequest  request)
+    {
+        Name = request.Name;
     }
 }
