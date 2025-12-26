@@ -1,0 +1,15 @@
+services:
+  caddy:
+    image: caddy
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./caddy-conf:/etc/caddy:ro
+  backend:
+    image: ghcr.io/abynox/mess:main
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data:rw
