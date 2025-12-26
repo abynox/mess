@@ -12,6 +12,6 @@ services:
       - .env
     build:
       context: ./backend/
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./data:/data:rw
