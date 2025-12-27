@@ -7,7 +7,7 @@ services:
     volumes:
       - ./caddy-conf:/etc/caddy:ro
   backend:
-    image: ghcr.io/abynox/mess-backend:main
+    image: ghcr.io/abynox/mess:backend
     restart: unless-stopped
     env_file:
       - .env
@@ -17,4 +17,4 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: ghcr.io/abynox/mess-frontend:main
+    image: ghcr.io/abynox/mess:frontend
