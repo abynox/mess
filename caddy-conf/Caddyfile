@@ -5,6 +5,9 @@
 	handle /signin-oidc/* {
         reverse_proxy http://backend:8080
     }
+	handle /scalar/* {
+        reverse_proxy http://backend:8080
+    }
 
 	# Forward everything else to App B
 	handle {
