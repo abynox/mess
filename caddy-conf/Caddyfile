@@ -1,6 +1,9 @@
 :80 {
 	handle /api/* {
         reverse_proxy http://backend:8080
+
+	handle /signin-oidc/* {
+        reverse_proxy http://backend:8080
     }
 
 	# Forward everything else to App B
