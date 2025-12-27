@@ -3,7 +3,7 @@ services:
     image: caddy
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8866:80"
     volumes:
       - ./caddy-conf:/etc/caddy:ro
   backend:
@@ -14,4 +14,4 @@ services:
       context: ./backend/
       dockerfile: Dockerfile
     volumes:
-      - ./data:/data:rw
+      - ./data/:/data/:rw

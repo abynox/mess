@@ -12,12 +12,16 @@ using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 var builder = WebApplication.CreateBuilder(args);
 
 Config.GetFromEnvironment();
-Console.WriteLine("Migrating Database");
-using (var db = new AppDatabaseContext())
+Console.WriteLine("Connection string: " + Config.Instance.DbConnectionString);
+if (File.Exists(Config.Instance.DbFilePath))
 {
-    db.Database.Migrate();
+    Console.WriteLine("Migrating Database as a database already exists");
+    using (var db = new AppDatabaseContext())
+    {
+        db.Database.Migrate();
+    }
+    Console.WriteLine("Migrated Database");
 }
-Console.WriteLine("Migrated Database");
 
 
 // Add services to the container.
