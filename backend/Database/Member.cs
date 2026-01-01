@@ -8,7 +8,15 @@ public class Member
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid? Id { get; set; }
     public string Name { get; set; } = "Unknown";
+    
+    /// <summary>
+    /// The id of auser associated with a member
+    /// </summary>
     public Guid? UserId { get; set; }
+    
+    /// <summary>
+    /// The user associated with a member
+    /// </summary>
     public User? User { get; set; }
     
     public Member() { }
