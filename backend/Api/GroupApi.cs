@@ -3,11 +3,13 @@ using System.Threading.Tasks.Dataflow;
 using Mess.Api.Data;
 using Mess.Auth;
 using Mess.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mess.Api;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/groups")]
 public class GroupApi : Controller

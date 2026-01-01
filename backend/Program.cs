@@ -2,6 +2,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using Mess;
+using Mess.Api;
 using Mess.Auth;
 using Mess.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -174,6 +175,9 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim(ClaimTypes.NameIdentifier);
     });
 });
+
+// Middleware for getting the group and checking access, ...
+builder.Services.AddScoped<GroupAccessFilter>();
 
 var app = builder.Build();
 app.UseForwardedHeaders(new ForwardedHeadersOptions

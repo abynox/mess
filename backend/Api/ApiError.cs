@@ -1,6 +1,6 @@
 namespace Mess.Api;
 
-public class ApiError
+public class ApiError(string error)
 {
-    public string Error { get; set; }
+    public string Error { get; set; } = error;
 }

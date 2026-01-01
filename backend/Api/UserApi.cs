@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Mess.Auth;
 using Mess.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -17,10 +18,12 @@ public class UserApi : Controller
     }
     
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<User>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult Get()
     {
         User? u = _currentUserService.GetCurrentUser();
-        if (u == null) return Forbid();
+        if (u == null) return Unauthorized();
         return Ok(u);
     }
 }
