@@ -52,6 +52,11 @@ public class SsoApi : Controller
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    /// <summary>
+    /// Logs in via oidc and then creates a jwt for usage with the api. redirects to '<redirectUrl>?jwt=<jwt>'
+    /// </summary>
+    /// <param name="redirectUrl"></param>
+    /// <returns></returns>
     [HttpGet("login")]
     [Authorize(AuthenticationSchemes = "oidc")]
     public IActionResult RedirectLogin([FromQuery] string redirectUrl)
