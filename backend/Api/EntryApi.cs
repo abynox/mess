@@ -52,7 +52,12 @@ public class EntryApi : Controller
         return Ok(ApiEntryFromEntry(entry));
     }
     
-    
+    /// <summary>
+    /// Creates a new Entry for the group
+    /// </summary>
+    /// <param name="groupId">Id of the group</param>
+    /// <param name="entry">Entry to create</param>
+    /// <returns></returns>
     [HttpPost]
     [ProducesResponseType<ApiEntry>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -26,11 +26,6 @@ public class SsoApi : Controller
         _db = db;
         _currentUser = currentUserService;
     }
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok(HttpContext.GetUserClaims());
-    }
 
     [HttpGet("signout")]
     public async Task<IActionResult> Signout()
