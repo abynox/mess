@@ -10,7 +10,7 @@ public class Member
     public string Name { get; set; } = "Unknown";
     
     /// <summary>
-    /// The id of auser associated with a member
+    /// The1 id of auser associated with a member
     /// </summary>
     public Guid? UserId { get; set; }
     

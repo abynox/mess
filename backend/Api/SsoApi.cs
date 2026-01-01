@@ -72,5 +72,6 @@ public class SsoApi : Controller
     public async Task<IActionResult> StartLogin([FromQuery] string redirectUrl = "/")
     {
         return Redirect(redirectUrl);
+        
     }
 }
