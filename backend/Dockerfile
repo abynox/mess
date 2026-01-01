@@ -19,5 +19,7 @@ RUN dotnet publish "./Mess.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Us
 
 FROM base AS final
 WORKDIR /app
+RUN mkdir /data/
+RUN chmod -R 777 /data/
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Mess.dll"]

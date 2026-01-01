@@ -188,8 +188,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedProtoHeaderName = "X-Forwarded-Proto",
 });
 
-
-
 // Configure the HTTP request pipeline.
 app.UseRouting();
 app.MapOpenApi();
