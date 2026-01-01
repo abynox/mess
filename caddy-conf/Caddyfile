@@ -1,16 +1,12 @@
 :80 {
-	handle /api/* {
-        reverse_proxy http://backend:8080
-
-	handle /signin-oidc/* {
-        reverse_proxy http://backend:8080
+    # Frontend served under /app/
+    handle_path /app/* {
+       reverse_proxy http://frontend:80
     }
-	handle /scalar/* {
-        reverse_proxy http://backend:8080
-    }
+    redir / /app/ 301 # Redirect to frontend per default
 
-	# Forward everything else to App B
-	handle {
-		reverse_proxy http://frontend:80
-	}
+    # Default: backend
+    handle {
+       reverse_proxy http://backend:8080
+    }
 }
