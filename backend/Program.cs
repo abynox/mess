@@ -121,7 +121,7 @@ builder.Services.AddAuthentication(options =>
         {
             OnRedirectToIdentityProvider = context =>
             {
-                if (context.Request.Path.ToString().StartsWith("/api/") && context.Request.Path.ToString() != "/api/v1/sso/start" && context.Request.Path.ToString() != "/api/v1/sso/redirectlogin")
+                if (context.Request.Path.ToString().StartsWith("/api/") && context.Request.Path.ToString() != "/api/v1/sso/login")
                 {
                     context.Response.StatusCode = 401;
                     context.HandleResponse();

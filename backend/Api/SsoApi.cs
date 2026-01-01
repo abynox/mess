@@ -26,26 +26,11 @@ public class SsoApi : Controller
         _currentUser = currentUserService;
     }
 
-    [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok(new List<object>{HttpContext.Request.Headers["X-Forwarded-Proto"], HttpContext.Request.Headers["X-Forwarded-For"], HttpContext.Request.Headers["X-Forwarded-Host"], HttpContext.Request.Scheme});
-    }
-
     [HttpGet("signout")]
     public async Task<IActionResult> Signout()
     {
         await HttpContext.SignOutAsync();
         return Redirect("/");
-    }
-
-    [HttpGet("startlogin")]
-    public IActionResult CheckLoginType()
-    {
-        return Redirect("/api/v1/sso/start");
-        // Left in from MFS
-        if (Config.Instance.UseOAuth) return Redirect("/api/v1/sso/start");
-        return Redirect("/password");
     }
     
     private string GenerateJSONWebToken(string sub)
@@ -67,7 +52,7 @@ public class SsoApi : Controller
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    [HttpGet("redirectlogin")]
+    [HttpGet("login")]
     [Authorize(AuthenticationSchemes = "oidc")]
     public IActionResult RedirectLogin([FromQuery] string redirectUrl)
     {
@@ -76,11 +61,12 @@ public class SsoApi : Controller
 
         return Redirect(redirectUrl + "?jwt=" + GenerateJSONWebToken(currentUser.OidcId));
     }
-
+    /*
     [HttpGet("start")]
     [Authorize(AuthenticationSchemes = "oidc")]
     public async Task<IActionResult> StartLogin([FromQuery] string redirectUrl = "/")
     {
         return Redirect(redirectUrl);
     }
+    */
 }
