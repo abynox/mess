@@ -19,15 +19,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 Config.GetFromEnvironment();
 Console.WriteLine("Connection string: " + Config.Instance.DbConnectionString);
-if (File.Exists(Config.Instance.DbFilePath))
+
+Console.WriteLine("Migrating Database as a database already exists");
+using (var db = new AppDatabaseContext())
 {
-    Console.WriteLine("Migrating Database as a database already exists");
-    using (var db = new AppDatabaseContext())
-    {
-        db.Database.Migrate();
-    }
-    Console.WriteLine("Migrated Database");
+    db.Database.Migrate();
 }
+Console.WriteLine("Migrated Database");
 
 
 // Add services to the container.
