@@ -187,9 +187,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 
-app.UseRouting();
 // Configure the HTTP request pipeline.
-
+app.UseRouting();
 app.MapOpenApi();
 app.MapScalarApiReference();
 app.UseFileServer();
