@@ -1,11 +1,15 @@
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 using Mess;
 using Mess.Auth;
 using Mess.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
@@ -32,15 +36,44 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddDbContext<AppDatabaseContext>();
-builder.Services.AddAuthentication("Cookies");
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultScheme = "AppCookie";
+        options.DefaultScheme = "SmartScheme";
         options.DefaultChallengeScheme = "oidc";
         
-    })
-    .AddCookie("AppCookie", options =>
+    }).AddPolicyScheme("SmartScheme", "Cookie or JWT", options =>
     {
+        options.ForwardDefaultSelector = context =>
+        {
+            // Check whether Bearer authorization header exists.
+            string authHeader = context.Request.Headers["Authorization"];
+            if (!string.IsNullOrEmpty(authHeader) &&
+                authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                // If so use JWT authorization
+                return JwtBearerDefaults.AuthenticationScheme;
+            }
+
+            // Otherwise fallback to cookies
+            return CookieAuthenticationDefaults.AuthenticationScheme;
+        };
+    }).AddJwtBearer(options =>
+    {
+        // Create the JwtBearer Authorization scheme
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = Config.Instance.JwtIssuer,
+            ValidAudience = Config.Instance.JwtIssuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config.Instance.Secret))
+        };
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        // Create the Cookie Authorization scheme
         options.Events.OnRedirectToAccessDenied =
         options.Events.OnRedirectToLogin = c =>
         {
@@ -61,17 +94,17 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
 
         options.Scope.Add("openid");
-            options.Scope.Add("profile");
-            options.Scope.Add("email");
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
 
         options.GetClaimsFromUserInfoEndpoint = true;
 
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
             NameClaimType = "name",
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuerSigningKey = false,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateLifetime = true
         };
         
@@ -86,7 +119,7 @@ builder.Services.AddAuthentication(options =>
         {
             OnRedirectToIdentityProvider = context =>
             {
-                if (context.Request.Path.ToString().StartsWith("/api/") && context.Request.Path.ToString() != "/api/v1/sso/start")
+                if (context.Request.Path.ToString().StartsWith("/api/") && context.Request.Path.ToString() != "/api/v1/sso/start" && context.Request.Path.ToString() != "/api/v1/sso/redirectlogin")
                 {
                     context.Response.StatusCode = 401;
                     context.HandleResponse();

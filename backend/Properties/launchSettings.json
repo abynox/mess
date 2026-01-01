@@ -8,10 +8,11 @@
       "applicationUrl": "http://localhost:5260",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "OAuthAuthority": "http://localhost:9000/application/o/mfs/",
+        "OAuthAuthority": "http://authentik:9000/application/o/mfs/",
         "OAuthClientId": "PSsVTu5jzdOat2AlYyOarXIqR4Phq27nGgT3HTE8",
         "OAuthClientSecret": "jfRzPeWsiXZR6XBKlofQ9ifxGyqMXqdkJDMDOzsmxc23D6k26NO5KB04YN0zjdH6FIE5Q6xqbiZlfSj4EXQdtuQ22raxyaaZ724Yo7DAqjNN4LpzUsDhAFMEFoadiBEh",
-        "EncryptionKey": ",md?>'?wewCfv{l</IkK04^r_LEclO-A"
+        "Secret": ",md?>'?wewCfv{l</IkK04^r_LEclO-A",
+        "JwtIssuer": "localhost.mess"
       }
     },
     "https": {

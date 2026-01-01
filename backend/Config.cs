@@ -14,12 +14,15 @@ public class Config
     public string DbFilePath { get; set; } =
         "Database.db";
     public string FrontendUrl { get; set; } = "http://192.168.178.24/";
+    public string Secret { get; set; } = "";
+
 
     public bool UseOAuth { get; set; } = true;
     public string OAuthAuthority { get; set; } = "";
     public string OAuthClientId { get; set; } = "";
     public string OAuthClientSecret { get; set; } = "";
-    
+    public string JwtIssuer { get; set; } = "mess";
+
 
     public static void GetFromEnvironment()
     {
