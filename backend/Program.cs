@@ -8,6 +8,7 @@ using Mess.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -182,9 +183,11 @@ builder.Services.AddScoped<GroupAccessFilter>();
 var app = builder.Build();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto,
     KnownNetworks = { new IPNetwork(IPAddress.Any, 0) },
     ForwardedProtoHeaderName = "X-Forwarded-Proto",
 });
+
 
 
 // Configure the HTTP request pipeline.

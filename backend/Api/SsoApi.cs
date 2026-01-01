@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Mess.Api;
-[Authorize]
 
 [ApiController]
 [Route("/api/v1/sso")]
@@ -25,6 +24,12 @@ public class SsoApi : Controller
         _env = env;
         _db = db;
         _currentUser = currentUserService;
+    }
+
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return Ok(new List<object>{HttpContext.Request.Headers["X-Forwarded-Proto"], HttpContext.Request.Headers["X-Forwarded-For"], HttpContext.Request.Headers["X-Forwarded-Host"], HttpContext.Request.Scheme});
     }
 
     [HttpGet("signout")]
