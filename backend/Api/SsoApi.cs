@@ -66,12 +66,11 @@ public class SsoApi : Controller
 
         return Redirect(redirectUrl + "?jwt=" + GenerateJSONWebToken(currentUser.OidcId));
     }
-    /*
-    [HttpGet("start")]
+    
+    [HttpGet("cookie")]
     [Authorize(AuthenticationSchemes = "oidc")]
     public async Task<IActionResult> StartLogin([FromQuery] string redirectUrl = "/")
     {
         return Redirect(redirectUrl);
     }
-    */
 }
