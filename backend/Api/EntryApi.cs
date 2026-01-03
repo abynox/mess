@@ -1,5 +1,6 @@
 using Mess.Api.Data;
 using Mess.Auth;
+using Mess.Bank;
 using Mess.Data;
 using Mess.Util;
 using Microsoft.AspNetCore.Authorization;
@@ -103,7 +104,8 @@ public class EntryApi : Controller
         {
             return BadRequest(new ApiError("Entry must have a total price greater than 0"));
         }
-        // ToDo: settle
+
+        Banker.ProcessEntryPayments(e, _db);
         _db.Entries.Add(e);
         _db.SaveChanges();
         return Ok(ApiEntryFromEntry(e));

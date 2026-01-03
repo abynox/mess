@@ -20,4 +20,9 @@ public class Participant
     public Member Member { get; set; }
     
     public Participant() {}
+
+    public int GetPersonCount()
+    {
+        return ExtraParticipants + 1;
+    }
 }

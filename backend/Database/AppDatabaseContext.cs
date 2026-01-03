@@ -10,7 +10,8 @@ public class AppDatabaseContext : DbContext
     public DbSet<Member> Members { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Entry> Entries { get; set; }
-    
+    public DbSet<Balance> Balances { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         Config.GetFromEnvironment();
