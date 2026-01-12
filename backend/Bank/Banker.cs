@@ -20,13 +20,13 @@ public class Banker
         return balance;
     }
     
-    public static bool ProcessEntryPayments(Entry entry, AppDatabaseContext db)
+    public static bool ProcessEntryPayments(Entry entry, AppDatabaseContext db, decimal multiplier = 1)
     {
         decimal personCount = entry.GetTotalPersonCount();
         foreach (Participant payee in entry.Participants)
         {
             if (payee.PaidAmount == 0) continue;
-            decimal ppp = payee.PaidAmount / personCount;
+            decimal ppp = payee.PaidAmount / personCount * multiplier;
             foreach (Participant payer in entry.Participants)
             {
                 Balance b = GetOrCreateBalance(entry.Group, payer.Member, payee.Member, db);
@@ -36,5 +36,10 @@ public class Banker
 
         db.SaveChanges();
         return true;
+    }
+
+    public static bool ReverseEntryPayments(Entry entry, AppDatabaseContext db)
+    {
+        return ProcessEntryPayments(entry, db, -1);;
     }
 }

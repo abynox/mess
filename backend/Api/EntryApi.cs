@@ -110,6 +110,72 @@ public class EntryApi : Controller
         _db.SaveChanges();
         return Ok(ApiEntryFromEntry(e));
     }
+    
+    /// <summary>
+    /// Creates a new Entry for the group
+    /// </summary>
+    /// <param name="groupId">Id of the group</param>
+    /// <param name="entry">Entry to create</param>
+    /// <returns></returns>
+    [HttpPut("{entryId:guid}")]
+    [ProducesResponseType<ApiEntry>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ServiceFilter(typeof(GroupAccessFilter))]
+    public IActionResult UpdateApiEntry([FromRoute] Guid groupId, [FromRoute] Guid entryId, [FromBody] ApiEntryCreateRequest entry)
+    {
+        Group? group = HttpContext.Items["Group"] as Group;
+        User? user = HttpContext.Items["CurrentUser"] as User;
+        if (user == null) return Unauthorized();
+        if (group == null) return NotFound();
+        Entry? e = _db.Entries.FirstOrDefault(x => x.Id == entryId && x.GroupId == groupId);
+        if(e == null) return NotFound();
+        if (!group.CanBeEditedBy(user)) return Forbid();
+        
+        // Important so payments are reversed. There will be cumulative error just like usual cause of floating point inprecission.
+        // Also if we ever change how balance is calculated this reverse method will reverse payment according to the new method
+        Banker.ReverseEntryPayments(e, _db);
+        
+        e.Date = entry.Date;
+        e.Name = entry.Name;
+        if (entry.Participants.Count == 0)
+        {
+            return BadRequest(new ApiError("Entry must have at least one participant"));
+        }
+        if(entry.Participants.GroupBy(x => x.MemberId, x => x.MemberId, (guid, guids) => new {Count = guids.Count()}).Any(x => x.Count > 1))
+        {
+            // ToDo: Add member id to error
+            return BadRequest(new ApiError("Cannot have same member in entry multiple times"));
+        }
+
+        e.Participants.Clear();
+        foreach (ApiEntryCreateRequestParticipant participant in entry.Participants)
+        {
+            Participant p = new Participant();
+            p.ExtraParticipants = participant.ExtraParticipants;
+            p.PaidAmount = participant.PaidAmount;
+            // Check if member exists
+            Member? m = group.Members.FirstOrDefault(x => x.Id == participant.MemberId);
+            if (m == null)
+            {
+                return BadRequest(new ApiError("Member '" + participant.MemberId + "' not found in group '" + group.Name +"'"));
+            }
+            p.MemberId = participant.MemberId;
+            p.Member = m;
+            e.Participants.Add(p);
+        }
+
+        if (e.GetTotalPrice() == 0)
+        {
+            return BadRequest(new ApiError("Entry must have a total price greater than 0"));
+        }
+
+        Banker.ProcessEntryPayments(e, _db);
+        _db.Entries.Add(e);
+        _db.SaveChanges();
+        return Ok(ApiEntryFromEntry(e));
+    }
 
     private ApiEntry? ApiEntryFromEntry(Entry e)
     {
