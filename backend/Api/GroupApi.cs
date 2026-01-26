@@ -28,7 +28,7 @@ public class GroupApi : Controller
     /// <returns>Groups of the logged in user</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType<Group>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<List<Group>>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
     public IActionResult GetGroups()
     {
         User? loggedInUser = _currentUser.GetCurrentUser();
